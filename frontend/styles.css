@@ -1,0 +1,32 @@
+@font-face {
+    font-family: FrizQuadrata;
+    src: url("fonts/Friz Quadrata Regular.ttf");
+}
+
+body {
+    background-color: black;
+    background-image: url("frostylolbackground.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: auto 100vh;
+    color: #DDDDDD;
+    text-align: center;
+    font-family: FrizQuadrata, serif;
+}
+
+#title {
+    margin-top: 1rem;
+    height: 10rem;
+    width: auto;
+}
+
+#welcome {
+    margin-top: 0;
+}
+
+#music {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+}
