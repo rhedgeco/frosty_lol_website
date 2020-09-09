@@ -12,6 +12,8 @@ setup(
         'requests',
         'falcon',
         'httpie',
-        'pytest'
+        'pytest',
+        'asyncio',
+        'websockets'
     ]
 )
