@@ -3,17 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Frosty Lol</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <img id="title" src="frosty.png" alt="">
-    <audio id="music" controls>
-        <source src="pyke_machine.mp3" type="audio/mp3">
-    </audio>
-    <h2 id="welcome">
-        Welcome to the home page for<br>
-        the summoner
-        <a href="https://na.op.gg/summoner/userName=frosty" style="color: #00C853">Frosty</a>.
-    </h2>
+<img id="title" src="frosty.png" alt="">
+<audio id="music" controls>
+    <source src="pyke_machine.mp3" type="audio/mp3">
+</audio>
+<h2 id="welcome">
+    Welcome to the home page for<br>
+    the summoner
+    <a href="https://na.op.gg/summoner/userName=frosty" style="color: #00C853">Frosty</a>.
+</h2>
+<div id="chat-holder" class="minimize">
+    <div id="chat-area">
+        <p id="chat-template">
+            <span style='color: #808080; font-family: monospace'>
+                chat_time
+            </span>
+            chat_message<br>
+        </p>
+        <div id="chat-messages">
+        </div>
+        <div id="chat-input">
+            <form onsubmit="send_message(); return false;">
+                <input id="chat-type" type="text" maxlength="80">
+                <a id="chat-submit" class="material-icons" onclick="send_message()">send</a>
+            </form>
+        </div>
+    </div>
+    <div id="chat-title">All Chat</div>
+    <a id="chat-hide" class="material-icons"
+       onclick="toggle_icon('expand_more','expand_less',this);toggle_minimize(this.parentElement);">
+        expand_less
+    </a>
+</div>
+<script src="chat_control.js"></script>
 </body>
 </html>
