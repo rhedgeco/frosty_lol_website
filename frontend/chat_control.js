@@ -38,21 +38,31 @@ function get_date_template(date) {
     return temp;
 }
 
+function clean_chat(chat) {
+    chat = chat.replace(/&/g, "&amp;");
+    chat = chat.replace(/</g, "&lt;");
+    chat = chat.replace(/>/g, "&gt;");
+    chat = chat.replace(/"/g, "&quot;");
+    chat = chat.replace(/'/g, "&#39;");
+    return chat;
+}
+
 function toggle_icon(icon1, icon2, object) {
     if (object.text === icon1) object.text = icon2;
     else object.text = icon1;
 }
 
 function toggle_minimize(object) {
-    if(object.classList.contains('minimize')) object.classList.remove('minimize');
+    if (object.classList.contains('minimize')) object.classList.remove('minimize');
     else object.classList.add('minimize');
 }
 
 function send_message() {
     let chat = chatType.value;
-    if(chat === "") return;
+    if (chat === "") return;
     chatType.value = "";
     socket.send(chat);
+    chat = clean_chat(chat);
     messageHolder.append(get_chat_template(chat, "[...]"));
     update_chat_scroll();
 }
@@ -65,7 +75,7 @@ function update_all_messages() {
     let req = new XMLHttpRequest();
     req.open('GET', 'api/chat');
     req.onload = function () {
-        if(req.status === 200) {
+        if (req.status === 200) {
             messageHolder.innerHTML = "";
             let lastDate = "";
             let chats = JSON.parse(req.responseText);

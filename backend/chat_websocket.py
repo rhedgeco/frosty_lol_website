@@ -20,7 +20,8 @@ class ChatWebsocket:
             self._connections.append(websocket)
             try:
                 while True:
-                    chat = self._clean_chat(await websocket.recv())
+                    chat = await websocket.recv()
+                    chat = self._clean_chat(chat)
                     self.storage.add(chat)
                     for socket in self._connections:
                         await socket.send(chat)
@@ -34,8 +35,18 @@ class ChatWebsocket:
         loop.run_until_complete(start_socket)
         loop.run_forever()
 
-    def _clean_chat(self, chat):
+    def _clean_chat(self, chat: str):
         clean = chat
+
+        # check if chat exceeds character limit
         if len(chat) > self._max_chat_length:
             clean = chat[0:self._max_chat_length]
+
+        # check if chat contains any bad characters (inserting html)
+        clean = clean.replace('&', '&amp;')
+        clean = clean.replace('<', '&lt;')
+        clean = clean.replace('>', '&gt;')
+        clean = clean.replace('"', '&quot;')
+        clean = clean.replace("'", '&#39;')
+
         return clean
