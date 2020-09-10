@@ -8,6 +8,7 @@ from datetime import datetime
 class Chat:
     text: str
     timestamp: datetime
+    user: str
 
 
 class ChatStorageHistory:
@@ -19,8 +20,8 @@ class ChatStorageHistory:
         self._sorted_storage_cache = []
         self._cache_lock = threading.Lock()
 
-    def add(self, text: str):
-        text = Chat(text, datetime.now())
+    def add(self, text: str, user: str):
+        text = Chat(text, datetime.now(), user)
         with self._cache_lock:
             self._sorted_storage_cache = []
             if self._string_count >= self._max_history:  # storage is full, replace oldest chat
@@ -42,7 +43,7 @@ class ChatStorageHistory:
                 if i_shift >= self._max_history:
                     i_shift -= self._max_history
                 chat = self._storage[i_shift]
-                chat = [chat.text, chat.timestamp.strftime("[%H:%M]"), chat.timestamp.strftime("%B %d, %Y")]
+                chat = [chat.text, chat.timestamp.strftime("[%H:%M]"), chat.timestamp.strftime("%B %d, %Y"), chat.user]
                 self._sorted_storage_cache.append(chat)
 
             return self._sorted_storage_cache

@@ -5,6 +5,10 @@
     <title>Frosty Lol</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id"
+          content="953803778347-laspasf834uni51o66dpsp345crmnpve.apps.googleusercontent.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
 <img id="title" src="frosty.png" alt="">
@@ -19,21 +23,26 @@
 <div id="chat-holder" class="minimize">
     <div id="chat-area">
         <div id="chat-area-templates">
-            <p id="chat-template" style="font-family: sans-serif">
-                <span style='color: #808080; font-family: monospace'>
+            <p id="chat-template" style="font-family: sans-serif; margin-top: 0.5rem; margin-bottom: 0;">
+                <span style='color: #808080; font-family: monospace;'>
                     chat_time
                 </span>
                 chat_message<br>
             </p>
             <p id="date-template" style='color: #808080; font-family: monospace; text-align: center;'>chat_date</p>
+            <p id="user-template" style='color: #808080; font-family: monospace; margin-bottom: 0;'>chat_user</p>
         </div>
         <div id="chat-messages">
         </div>
         <div id="chat-input">
-            <form onsubmit="send_message(); return false;">
+            <form id="chat-form" onsubmit="send_message(); return false;" class="hide">
                 <input id="chat-type" type="text" maxlength="80">
                 <a id="chat-submit" class="material-icons" onclick="send_message()">send</a>
             </form>
+            <div id="chat-sign-in" class="">
+                <div class="g-signin2" data-height="32" data-theme="dark" data-onsuccess="onSignIn"></div>
+                to start chatting.
+            </div>
         </div>
     </div>
     <div id="chat-title">All Chat</div>

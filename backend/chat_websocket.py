@@ -1,14 +1,19 @@
 import asyncio
+
+import falcon
 import websockets
 
 from backend.chat_storage_history import ChatStorageHistory
 from threading import Thread
 
+from backend.database_manager import DatabaseManager
+
 
 class ChatWebsocket:
-    def __init__(self, max_chat_length: int):
+    def __init__(self, max_chat_length: int, manager: DatabaseManager):
         self.storage = ChatStorageHistory(100)
         self._max_chat_length = max_chat_length
+        self._manager = manager
         self._connections = []
 
         loop = asyncio.new_event_loop()
@@ -18,11 +23,19 @@ class ChatWebsocket:
     def _start_chat_socket(self, loop):
         async def socket_runner(websocket, path):
             self._connections.append(websocket)
+            session = await websocket.recv()
+            user = None
             try:
-                while True:
+                user = self._manager.get_user_info(session)
+                await websocket.send('validated')
+            except falcon.errors.HTTPBadRequest:
+                await websocket.send('invalid')
+
+            try:
+                while user is not None:
                     chat = await websocket.recv()
                     chat = self._clean_chat(chat)
-                    self.storage.add(chat)
+                    self.storage.add(chat, user['nickname'])
                     for socket in self._connections:
                         await socket.send(chat)
             except websockets.exceptions.ConnectionClosed:
