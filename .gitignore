@@ -118,3 +118,4 @@ dmypy.json
 /.idea/
 /.vscode/
 .bash_profile
+/backend/sqlite/
