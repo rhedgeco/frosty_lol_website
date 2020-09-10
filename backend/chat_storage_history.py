@@ -42,7 +42,7 @@ class ChatStorageHistory:
                 if i_shift >= self._max_history:
                     i_shift -= self._max_history
                 chat = self._storage[i_shift]
-                chat = [chat.text, chat.timestamp.strftime("[%H:%M:%S]")]
+                chat = [chat.text, chat.timestamp.strftime("[%H:%M:%S]"), chat.timestamp.strftime("%B %d, %Y")]
                 self._sorted_storage_cache.append(chat)
 
             return self._sorted_storage_cache

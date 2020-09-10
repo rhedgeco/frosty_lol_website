@@ -3,6 +3,7 @@ let chatType = document.getElementById("chat-type");
 let messageHolder = document.getElementById("chat-messages");
 let connected = false;
 let chat_template = document.getElementById("chat-template");
+let date_template = document.getElementById("date-template");
 
 socket.onopen = function (e) {
     connected = true;
@@ -28,7 +29,12 @@ function get_chat_template(message, time) {
     let temp = chat_template.cloneNode(true);
     temp.innerHTML = temp.innerHTML.replace("chat_message", message);
     temp.innerHTML = temp.innerHTML.replace("chat_time", time);
-    temp.id = "";
+    return temp;
+}
+
+function get_date_template(date) {
+    let temp = date_template.cloneNode(true);
+    temp.innerHTML = temp.innerHTML.replace("chat_date", date);
     return temp;
 }
 
@@ -61,8 +67,14 @@ function update_all_messages() {
     req.onload = function () {
         if(req.status === 200) {
             messageHolder.innerHTML = "";
+            let lastDate = "";
             let chats = JSON.parse(req.responseText);
             for (let i = 0; i < chats.length; i++) {
+                let date = chats[i][2];
+                if (lastDate !== date) {
+                    messageHolder.append(get_date_template(date));
+                    lastDate = date;
+                }
                 messageHolder.append(get_chat_template(chats[i][0], chats[i][1]));
             }
             update_chat_scroll();
