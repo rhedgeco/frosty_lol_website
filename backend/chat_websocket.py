@@ -48,14 +48,11 @@ class ChatWebsocket:
             finally:
                 self._connections.remove(websocket)
 
-        try:
-            print('restarting chat socket')
-            asyncio.set_event_loop(loop)
-            start_socket = websockets.serve(ws_handler=socket_runner, host='0.0.0.0', port=8765)
-            loop.run_until_complete(start_socket)
-            loop.run_forever()
-        except:
-            print('websocket crashed')
+        print('starting chat socket')
+        asyncio.set_event_loop(loop)
+        start_socket = websockets.serve(ws_handler=socket_runner, host='0.0.0.0', port=8765)
+        loop.run_until_complete(start_socket)
+        loop.run_forever()
 
     def _clean_chat(self, chat: str):
         clean = chat
