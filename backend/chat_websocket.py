@@ -44,7 +44,7 @@ class ChatWebsocket:
                 self._connections.remove(websocket)
 
         asyncio.set_event_loop(loop)
-        start_socket = websockets.serve(socket_runner, 'localhost', 8765)
+        start_socket = websockets.serve(ws_handler=socket_runner, host='localhost', port=443)
         loop.run_until_complete(start_socket)
         loop.run_forever()
 
