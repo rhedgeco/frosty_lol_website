@@ -1,4 +1,4 @@
-let socket = new WebSocket("ws://localhost:443");
+let socket = new WebSocket("ws://localhost:8765");
 let chatType = document.getElementById("chat-type");
 let messageHolder = document.getElementById("chat-messages");
 let connected = false;
