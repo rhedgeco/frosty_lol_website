@@ -23,6 +23,7 @@ class ChatWebsocket:
     def _start_chat_socket(self, loop):
         async def socket_runner(websocket, path):
             self._connections.append(websocket)
+            name = "unloaded"
             try:
                 user = None
                 session = await websocket.recv()
@@ -32,7 +33,6 @@ class ChatWebsocket:
                 except falcon.errors.HTTPBadRequest:
                     await websocket.send('invalid')
 
-                name = "unloaded"
                 if user is not None:
                     name = user['nickname']
                     print(f'connected to user {name}')
