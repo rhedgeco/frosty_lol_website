@@ -32,6 +32,11 @@ class ChatWebsocket:
                 except falcon.errors.HTTPBadRequest:
                     await websocket.send('invalid')
 
+                name = "unloaded"
+                if user is not None:
+                    name = user['nickname']
+                    print(f'connected to user {name}')
+
                 while user is not None:
                     chat = await websocket.recv()
                     chat = self._clean_chat(chat)
@@ -39,7 +44,7 @@ class ChatWebsocket:
                     for socket in self._connections:
                         await socket.send(chat)
             except websockets.exceptions.ConnectionClosed:
-                pass  # do nothing
+                print(f'disconnected user {name}')
             finally:
                 self._connections.remove(websocket)
 
