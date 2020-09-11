@@ -23,15 +23,15 @@ class ChatWebsocket:
     def _start_chat_socket(self, loop):
         async def socket_runner(websocket, path):
             self._connections.append(websocket)
-            session = await websocket.recv()
-            user = None
             try:
-                user = self._manager.get_user_info(session)
-                await websocket.send('validated')
-            except falcon.errors.HTTPBadRequest:
-                await websocket.send('invalid')
+                user = None
+                session = await websocket.recv()
+                try:
+                    user = self._manager.get_user_info(session)
+                    await websocket.send('validated')
+                except falcon.errors.HTTPBadRequest:
+                    await websocket.send('invalid')
 
-            try:
                 while user is not None:
                     chat = await websocket.recv()
                     chat = self._clean_chat(chat)
