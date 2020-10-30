@@ -1,9 +1,6 @@
 #ignore pycharm stuff
 .idea
 
-#ignore virtual environment directory
-/venv/
-
 # Created by https://www.gitignore.io/api/python
 # Edit at https://www.gitignore.io/?templates=python
 
@@ -119,3 +116,4 @@ dmypy.json
 /.vscode/
 .bash_profile
 /backend/sqlite/
+/venv/
