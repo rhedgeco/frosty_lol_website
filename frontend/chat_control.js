@@ -1,4 +1,4 @@
-var socket = new WebSocket("ws://localhost:8765");
+var socket = new WebSocket("ws://localhost/api/chat/feed");
 var chatType = document.getElementById("chat-type");
 var messageHolder = document.getElementById("chat-messages");
 var connected = false;
@@ -35,34 +35,40 @@ function send_token(id_token) {
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status === 200) {
-            console.log(xhr.responseText); // SessionID
-            document.cookie = 'session_id=' + xhr.responseText;
-            socket.send(xhr.responseText);
+            var resp = JSON.parse(xhr.responseText);
+            console.log(resp['session_id']);
+            socket.send(resp['session_id'])
         }
     };
     xhr.send();
 }
-
 
 socket.onopen = function (e) {
     // do nothing
 };
 
 socket.onmessage = function (event) {
-    if (event.data === "validated") {
-        connected = true;
-        chat_form.classList.remove("hide");
-        chat_signin.classList.add("hide");
+    var message = event.data;
+    if (!connected) {
+        if (message === 'validated session') {
+            connected = true;
+            chat_form.classList.remove("hide");
+            chat_signin.classList.add("hide");
+            return;
+        } else if (message === 'invalid session') {
+            return;
+        }
     }
+
     update_all_messages();
 };
 
 socket.onclose = function (event) {
-    connected = false;
+
 };
 
 socket.onerror = function (error) {
-    alert(`Chat error: ${error.message}`);
+    alert('Error: chat socket error.')
 };
 
 window.onload = function () {
@@ -131,8 +137,10 @@ function update_all_messages() {
             var lastUser = "";
             var chats = JSON.parse(req.responseText);
             for (var i = 0; i < chats.length; i++) {
-                var date = chats[i][2];
-                var user = chats[i][3];
+                var message = "" + chats[i][0];
+                var user = "" + chats[i][3];
+                var time = "" + chats[i][1];
+                var date = "" + chats[i][2];
                 if (lastDate !== date) {
                     messageHolder.append(get_date_template(date));
                     lastDate = date;
@@ -141,7 +149,7 @@ function update_all_messages() {
                     messageHolder.append(get_user_template(user));
                     lastUser = user;
                 }
-                messageHolder.append(get_chat_template(chats[i][0], chats[i][1]));
+                messageHolder.append(get_chat_template(message, time));
             }
             update_chat_scroll();
         }

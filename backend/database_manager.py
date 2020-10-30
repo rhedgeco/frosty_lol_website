@@ -1,11 +1,10 @@
 import uuid
 import datetime
 
-import falcon
-
 from datetime import datetime as dt
+from sanic.exceptions import InvalidUsage, Unauthorized
 
-from general_falcon_webserver.backend.general_manager.databases import SqliteDatabase
+from backend.database_handlers.databases import SqliteDatabase
 
 TIME_FORMAT = '%d/%m/%Y %H:%M:%S'
 TIME_EXPIRE = 600
@@ -35,24 +34,24 @@ class DatabaseManager:
     def _get_user_from_database(self, session: str):
         user = self.db.fetchone_query(f"SELECT * FROM users WHERE session_id='{session}'")
         if not user:
-            raise falcon.HTTPBadRequest('Could not validate session')
+            raise InvalidUsage('Could not validate session')
         self._validate_user_session(user['user_id'])
         return user
 
     def _get_user_by_id(self, user_id: str):
         user = self.db.fetchone_query(f"SELECT * FROM users WHERE user_id='{user_id}'")
         if not user:
-            raise falcon.HTTPBadRequest('Could not locate user.')
+            raise InvalidUsage('Could not locate user.')
         return user
 
     def _validate_user_session(self, user_id: str):
         user = self.db.fetchone_query(f"SELECT * FROM users WHERE user_id = '{user_id}'")
         if not user:
-            raise falcon.HTTPBadRequest('User ID not accepted.')
+            raise InvalidUsage('User ID not accepted.')
 
         user_expire = dt.strptime(user['session_timeout'], TIME_FORMAT)
         if user_expire < dt.now():
-            raise falcon.HTTPUnauthorized(f'User session has timed out.')
+            raise Unauthorized(f'User session has timed out.')
         session = user['session_id']
         self._reset_user_session(user_id, session)
 

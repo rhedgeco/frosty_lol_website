@@ -10,10 +10,7 @@ setup(
         "cachecontrol",
         'google',
         'requests',
-        'falcon',
-        'httpie',
-        'pytest',
-        'asyncio',
+        'sanic',
         'websockets'
     ]
 )

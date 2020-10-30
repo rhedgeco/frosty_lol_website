@@ -8,5 +8,5 @@ if not exists users
     photo           text
 );
 
-create unique index google_oauth_user_id_uindex
+create unique index if not exists google_oauth_user_id_uindex
     on users (user_id);
