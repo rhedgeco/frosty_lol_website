@@ -11,7 +11,8 @@ setup(
         'google',
         'requests',
         'sanic',
-        'websockets==6.0',
+        'sanic-cors',
+        'websockets',
         'dataclasses'
     ]
 )
