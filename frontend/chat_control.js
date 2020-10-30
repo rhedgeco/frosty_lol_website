@@ -1,4 +1,4 @@
-var socket = new WebSocket("ws://localhost/api/chat/feed");
+var socket = new WebSocket("ws://frosty.lol/api/chat/feed");
 var chatType = document.getElementById("chat-type");
 var messageHolder = document.getElementById("chat-messages");
 var connected = false;
