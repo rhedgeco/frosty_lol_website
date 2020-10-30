@@ -1,6 +1,6 @@
 from pathlib import Path
 from sanic import Sanic, response
-from sanic.websocket import WebSocketProtocol
+from sanic_cors import CORS
 
 from backend.chat_websocket import ChatManager
 from backend.database_handlers.databases import SqliteDatabase
@@ -8,6 +8,7 @@ from backend.database_manager import DatabaseManager
 from backend.google_oauth import GoogleOauth
 
 app = Sanic('frosty_lol')
+CORS(app)
 
 frontend_dir = Path('./frontend')
 app.static('/', str(frontend_dir))
