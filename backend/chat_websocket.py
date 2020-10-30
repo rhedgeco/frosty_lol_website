@@ -1,3 +1,5 @@
+from asyncio import CancelledError
+
 from sanic.exceptions import InvalidUsage
 from sanic.response import json
 from sanic.websocket import ConnectionClosed
@@ -26,14 +28,17 @@ class ChatManager:
                     chat = self._clean_chat(data)
                     self.storage.add(chat, user['nickname'])
                     for socket in self._connections:
-                        await socket.send(chat)
+                        try:
+                            await socket.send(chat)
+                        except ConnectionClosed:
+                            self._connections.remove(socket)
                 else:
                     try:
                         user = self._manager.get_user_info(session=data)
                         await ws.send('validated session')
                     except InvalidUsage:
                         await ws.send('invalid session')
-        except ConnectionClosed:
+        except CancelledError:
             self._connections.remove(ws)
 
     def _clean_chat(self, chat: str):
